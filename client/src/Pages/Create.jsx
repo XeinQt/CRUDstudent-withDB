@@ -15,29 +15,36 @@ function Create() {
 
   const handleAdd = async () => {
     if (
-      firstname.trim() === "" &&
-      lastname.trim() === "" &&
-      course.trim() === "" &&
+      firstname.trim() === "" ||
+      lastname.trim() === "" ||
+      course.trim() === "" ||
       email.trim() === ""
     ) {
       alert("Please input a filed");
-    }
-
-    try {
-      await axios.post("http://localhost:5000/add", {
-        firstname: firstname,
-        lastname: lastname,
-        course: course,
-        email: email,
-      });
-      alert("Added successfully!");
-      setFirstname("");
-      setLastname("");
-      setCourse("");
-      setEmail("");
-      navigate("/");
-    } catch (error) {
-      console.error("Error in adding", error);
+      return;
+    } else if (/\d/.test(firstname) || /\d/.test(lastname)) {
+      alert("Please input a valid firstname or lastname");
+      return;
+    } else if (!email.endsWith("gmail.com")) {
+      alert("Please a email with @gmail.com");
+      return;
+    } else {
+      try {
+        await axios.post("http://localhost:5000/add", {
+          firstname: firstname,
+          lastname: lastname,
+          course: course,
+          email: email,
+        });
+        alert("Added successfully!");
+        setFirstname("");
+        setLastname("");
+        setCourse("");
+        setEmail("");
+        navigate("/");
+      } catch (error) {
+        console.error("Error in adding", error);
+      }
     }
   };
   return (
@@ -47,7 +54,7 @@ function Create() {
         <input
           value={firstname}
           onChange={(e) => setFirstname(e.target.value)}
-          className="inputCss focus: outline-none"
+          className="inputCss focus: outline-none "
           type="text"
           placeholder="Enter firstname"
         />

@@ -48,31 +48,39 @@ function Home() {
             </tr>
           </thead>
           <tbody>
-            {students.map((student, index) => (
-              <tr key={student.id}>
-                <td className="thCss">{student.id}</td>
-                <td className="thCss">{student.firstname}</td>
-                <td className="thCss">{student.lastname}</td>
-                <td className="thCss">{student.course}</td>
-                <td className="thCss">{student.email}</td>
-                <td className="thCss">
-                  <div className="flex gap-2 justify-center">
-                    <button
-                      onClick={() => handleEdit(student)}
-                      className="bg-yellow-300 thCss cursor-pointer"
-                    >
-                      EDIT
-                    </button>
-                    <button
-                      onClick={() => handleDelete(student.id)}
-                      className="bg-red-300 thCss cursor-pointer"
-                    >
-                      DELETE
-                    </button>
-                  </div>
+            {students.length > 0 ? (
+              students.map((student, index) => (
+                <tr key={student.id}>
+                  <td className="thCss">{student.id}</td>
+                  <td className="thCss">{student.firstname}</td>
+                  <td className="thCss">{student.lastname}</td>
+                  <td className="thCss">{student.course}</td>
+                  <td className="thCss">{student.email}</td>
+                  <td className="thCss">
+                    <div className="flex gap-2 justify-center">
+                      <button
+                        onClick={() => handleEdit(student)}
+                        className="bg-yellow-300 thCss cursor-pointer"
+                      >
+                        EDIT
+                      </button>
+                      <button
+                        onClick={() => handleDelete(student.id)}
+                        className="bg-red-300 thCss cursor-pointer"
+                      >
+                        DELETE
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td className="thCss text-center" colSpan="6">
+                  There is no student.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
