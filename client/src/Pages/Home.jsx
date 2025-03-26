@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Home() {
   const navigate = useNavigate();
@@ -10,6 +11,22 @@ function Home() {
   const handleEdit = () => {
     navigate("/edit");
   };
+
+  const [students, setStudents] = useState([]);
+
+  const fetchStudent = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/student");
+      setStudents(res.data); // ✅ this is the correct way
+    } catch (error) {
+      console.error("Failed to fetch", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudent();
+  }, []);
+
   return (
     <div className="h-[100vh] w-full flex items-center justify-center bg-pink-200">
       <div className="bg-blue-400 p-5">
@@ -31,26 +48,31 @@ function Home() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="thCss">1</td>
-              <th className="thCss">Rico</th>
-              <th className="thCss">Alentijo</th>
-              <th className="thCss">BSIT</th>
-              <th className="thCss">09095549524</th>
-              <th className="thCss">
-                <div className="flex gap-2 justify-center">
-                  <button
-                    onClick={handleEdit}
-                    className=" bg-yellow-300 thCss cursor-pointer"
-                  >
-                    EDIT
-                  </button>
-                  <button className="bg-red-300 thCss cursor-pointer">
-                    DELETE
-                  </button>
-                </div>
-              </th>
-            </tr>
+            {students.map((student, index) => (
+              <tr key={student.id}>
+                <td className="thCss">{student.id}</td>
+                <td className="thCss">{student.firstname}</td>
+                <td className="thCss">{student.lastname}</td>
+                <td className="thCss">{student.course}</td>
+                <td className="thCss">{student.email}</td>
+                <td className="thCss">
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      onClick={() => handleEdit(student)}
+                      className="bg-yellow-300 thCss cursor-pointer"
+                    >
+                      EDIT
+                    </button>
+                    <button
+                      onClick={() => handleDelete(student.id)}
+                      className="bg-red-300 thCss cursor-pointer"
+                    >
+                      DELETE
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
