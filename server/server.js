@@ -1,26 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql2");
+const db = require("./config/config.js");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// MySQL connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "studentCRUD",
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error("❌ Database not connected!");
-  } else {
-    console.log("✅ Connected successfully to MySQL!");
-  }
-});
 
 //add student
 app.post("/add", (req, res) => {
@@ -52,13 +36,27 @@ app.get("/student", (req, res) => {
   });
 });
 
+//delete
+app.delete("/delete/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "DELETE FROM student WHERE id = ?";
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      res.status(500).json({ message: "There is error in deleting!" });
+    } else {
+      res.json({ message: "Deleted successfully!" });
+    }
+  });
+});
+
 // Routes
 app.get("/", (req, res) => {
-  res.send("Welcome madafackert 😎");
+  res.send("Welcome madafackert");
 });
 
 // Start server
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

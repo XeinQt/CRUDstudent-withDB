@@ -27,6 +27,16 @@ function Home() {
     fetchStudent();
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/delete/${id}`);
+      alert("Student Deleted Sucessfully!");
+      fetchStudent();
+    } catch (error) {
+      console.error("Error deleting todo", error);
+    }
+  };
+
   return (
     <div className="h-[100vh] w-full flex items-center justify-center bg-pink-200">
       <div className="bg-blue-400 p-5">
@@ -49,7 +59,7 @@ function Home() {
           </thead>
           <tbody>
             {students.length > 0 ? (
-              students.map((student, index) => (
+              students.map((student) => (
                 <tr key={student.id}>
                   <td className="thCss">{student.id}</td>
                   <td className="thCss">{student.firstname}</td>
